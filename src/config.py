@@ -4,7 +4,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DatabaseSettings(BaseModel):
-    """Настройки подключения к PostgreSQL"""
+    """
+    Настройки подключения к PostgreSQL
+    """
     username: str
     password: str
     host: str
@@ -14,7 +16,9 @@ class DatabaseSettings(BaseModel):
 
     @property
     def url(self) -> str:
-        """Формирует URL для подключения к БД"""
+        """
+        Формирует URL для подключения к БД
+        """
         return (
             f"postgresql+asyncpg://{self.username}:{self.password}"
             f"@{self.host}:{self.port}/{self.name}"
@@ -22,12 +26,16 @@ class DatabaseSettings(BaseModel):
 
 
 class ApiSettings(BaseModel):
-    """Настройка API"""
+    """
+    Настройка API
+    """
     prefix: str = "/v1"
 
 
 class ParseSettings(BaseModel):
-    """Настройка Парсера"""
+    """
+    Настройка Парсера
+    """
     prefix: str = "/parser"
     url: str = "https://hh.ru/search/vacancy"
     header: dict = {
@@ -36,7 +44,9 @@ class ParseSettings(BaseModel):
 
 
 class Settings(BaseSettings):
-    """Главные настройки приложения"""
+    """
+    Главные настройки приложения
+    """
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,

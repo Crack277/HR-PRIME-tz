@@ -10,8 +10,10 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls):
-        # При инициализации класса
-        # возвращает его название в нижнем регистре + 's'
+        """
+        При инициализации класса
+        возвращает его название в нижнем регистре + 's'
+        """
         return f"{cls.__name__.lower()}s"
 
     id: Mapped[int] = mapped_column(primary_key=True)

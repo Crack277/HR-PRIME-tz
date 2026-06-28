@@ -1,6 +1,5 @@
-import os
-from pathlib import Path
 import pandas as pd
+from pathlib import Path
 from typing import List
 
 from src.models import Company
@@ -9,8 +8,6 @@ def export_companies_to_excel(companies_data: List[Company], filename: str = "co
         """
         Экспорт компаний с их вакансиями в Excel
         """
-        
-        # Формируем данные для Excel
         rows = []
         for company in companies_data:
             vacancies = company.vacancies
@@ -27,22 +24,19 @@ def export_companies_to_excel(companies_data: List[Company], filename: str = "co
                         "Город": vacancy.city
                     })
         
-        # Создаем DataFrame
         df = pd.DataFrame(rows)
         
         base_dir = Path(__file__).parent.parent.parent
         output_dir = base_dir / "exports"
         output_dir.mkdir(exist_ok=True)
     
-        # Путь к файлу (папка + имя файла) 👈 ВАЖНО!
+        # Путь к файлу (папка + имя файла)
         filepath = output_dir / filename
         
-        # Сохраняем в Excel
         with pd.ExcelWriter(filepath, engine='openpyxl') as writer:
-            # Лист с деталями
+            
             df.to_excel(writer, sheet_name="Вакансии", index=False)
             
-            # Лист со сводкой
             summary = []
             for company in companies_data:
                 summary.append({

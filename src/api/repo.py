@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -12,7 +12,9 @@ class Repository:
         self.session = session
 
     async def get_companies_by_vacancies(self, pagination: PaginationSchema) -> List[Company]:
-
+        """
+        Получение компаний с вакансиями (сортировка по убыванию вакансий)
+        """
         stmt = (
             select(Company)
             .options(selectinload(Company.vacancies))
@@ -26,6 +28,9 @@ class Repository:
         return list(companies)
 
     async def get_vacancies(self) -> Tuple[List[Vacancy], int]:
+        """
+        Получаем все вакансии и их количество
+        """
         stmt = select(Vacancy).order_by(Vacancy.id)
         result = await self.session.execute(stmt)
         vacancies = result.scalars().all()
@@ -38,18 +43,16 @@ class Repository:
         """
         saved_vacancies = 0
         saved_companies = 0
-        company_cache = {}
+        company_cache = {} # Используем 'кэш' для того, чтобы не перегружать бд запросами
 
         for value in vacancies:
             company_name = value.company
             
-            # Получаем или создаем компанию
             company, is_new = await self.get_or_create_company(company_name, company_cache)
 
             if is_new:
                 saved_companies += 1
             
-            # Создаем вакансию
             vacancy = Vacancy(
                 title=value.title,
                 experience=value.experience,
@@ -76,7 +79,9 @@ class Repository:
         company_name: str, 
         cache: Dict[str, Company]
     ) -> Tuple[Company, bool]:
-        """Получение или создание компании"""
+        """
+        Получение или создание компании
+        """
         if company_name in cache:
             return cache[company_name], False
         

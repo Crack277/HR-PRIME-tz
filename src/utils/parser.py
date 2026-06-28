@@ -12,6 +12,9 @@ async def get_vacancies_partial_regions(
     per_page: int = 20, # Больше не получается, хотя в api написано (минимум - 20, а максимум - 50)
     headers: dict = settings.parser.header
 ):
+    """
+    Получаем вакансии по регионам (area, из static/regions.py)
+    """
     all_vacancies = []
 
     for region in RUSSIAN_REGIONS:
@@ -38,7 +41,9 @@ async def get_vacancies_by_region(
     url: str = settings.parser.url, 
     headers: dict = settings.parser.header
 ):
-    
+    """
+    Получаем вакансии из конкретного региона (area)
+    """
     vacancies = []
     page = 0
     MAX_PAGES = 40

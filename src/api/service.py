@@ -19,6 +19,9 @@ async def get_companies_by_vacancies(
     pagination: PaginationSchema,
     session: AsyncSession = Depends(db_helper.session_dependency)
 ):
+    """
+    Получаем список компаний с их вакансиями
+    """
     repo = Repository(session=session)
     return await repo.get_companies_by_vacancies(pagination=pagination)
 
@@ -27,6 +30,9 @@ async def get_companies_by_vacancies(
 async def get_vacancies(
     session: AsyncSession = Depends(db_helper.session_dependency)
 ):
+    """
+    Получаем все вакансии
+    """
     repo = Repository(session=session)
     return await repo.get_vacancies()
 
@@ -35,6 +41,9 @@ async def get_vacancies(
 async def save_vacancies_to_db(
     session: AsyncSession = Depends(db_helper.session_dependency)
 ):
+    """
+    Получаем вакансии с hh.ru, нормализуем и сохраняем их в бд
+    """
     vacancies = await parser.get_vacancies_partial_regions()
 
     repo = Repository(session)
@@ -46,4 +55,7 @@ async def save_vacancies_to_db(
 def save_vacancies_to_excel(
     companies_data: List[Company] = Depends(get_companies_by_vacancies)
 ):
+    """
+    Сохраняем топ-20 вакансий из бд в файл Excel
+    """
     return save_to_excel.export_companies_to_excel(companies_data=companies_data)
