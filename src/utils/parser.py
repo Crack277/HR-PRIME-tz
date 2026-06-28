@@ -29,7 +29,7 @@ async def get_vacancies_partial_regions(
 
         all_vacancies.extend(vacancies)
 
-        await asyncio.sleep(2)
+        await asyncio.sleep(2) # подобрать значение при котором не банят
 
     return all_vacancies
 
@@ -110,6 +110,6 @@ async def get_vacancies_by_region(
             vacancies.append(vacancy)
 
         page += 1
-        await asyncio.sleep(1)
+        await asyncio.sleep(1) # подобрать значение при котором не банят
         
     return vacancies
